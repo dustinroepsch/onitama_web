@@ -1,3 +1,7 @@
+use onitama::onitama::cards::CARDS;
+
 fn main() {
-    println!("Hello, world!");
+    for card in CARDS.iter() {
+        println!("{:?}", card)
+    }
 }
