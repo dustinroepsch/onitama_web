@@ -1,6 +1,8 @@
 use core::fmt;
 
+pub mod board;
 pub mod cards;
+pub mod piece;
 
 pub type Offset = (i8, i8);
 
