@@ -39,7 +39,7 @@ impl fmt::Display for Card {
                     write!(f, "-")?;
                 }
             }
-            writeln!(f, "")?;
+            writeln!(f)?;
         }
         std::fmt::Result::Ok(())
     }

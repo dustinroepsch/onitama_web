@@ -1,7 +1,9 @@
-use onitama::onitama::cards::CARDS;
+use onitama::onitama::cards::{CARDS, CardId};
 
 fn main() {
-    for card in CARDS.iter() {
-        println!("{}", card)
+    for (card_id, card) in CARDS.iter() {
+        println!("cardId:{:?}\n{}", card_id, card)
     }
+
+    println!("{}", CardId::Mantis.get())
 }
