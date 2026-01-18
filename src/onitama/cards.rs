@@ -12,77 +12,77 @@ lazy_static! {
         Card {
             name: "Dragon",
             mov: vec![(-1, -1), (-2, 1), (2, 1), (1, -1)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Frog",
+            mov: vec![(-2, 0), (-1, 1), (1, -1)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Rabbit",
+            mov: vec![(-1, -1), (1, 1), (2, 0)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
+            name: "Crab",
+            mov: vec![(-2, 0), (0, 1), (2, 0)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
+            name: "Elephant",
+            mov: vec![(-1, 0), (-1, 1), (1, 0), (1, 1)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Goose",
+            mov: vec![(-1, 0), (-1, 1), (1, 0), (1, -1)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
+            name: "Rooster",
+            mov: vec![(-1, 0), (-1, -1), (1, 0), (1, 1)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Monkey",
+            mov: vec![(1, 1), (-1, -1), (-1, 1), (1, -1)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
+            name: "Mantis",
+            mov: vec![(-1, 1), (0, -1), (1, 1)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Horse",
+            mov: vec![(-1, 0), (0, 1), (0, -1)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Ox",
+            mov: vec![(0, 1), (0, -1), (1, 0)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
+            name: "Crane",
+            mov: vec![(0, 1), (-1, -1), (1, -1)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
+            name: "Boar",
+            mov: vec![(-1, 0), (0, 1), (1, 0)],
+            color: Color::Red,
+        },
+        Card {
+            name: "Eel",
+            mov: vec![(-1, 1), (-1, -1), (1, 0)],
             color: Color::Blue,
         },
         Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
-        },
-        Card {
-            name: "Tiger",
-            mov: vec![(0, -1), (0, 2)],
-            color: Color::Blue,
+            name: "Cobra",
+            mov: vec![(-1, 0), (1, 1), (1, -1)],
+            color: Color::Red,
         },
     ];
 }

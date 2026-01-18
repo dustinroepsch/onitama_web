@@ -29,7 +29,7 @@ impl fmt::Display for Card {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "Name: {}", self.name)?;
         writeln!(f, "Color: {}", self.color)?;
-        for row in -2..=2 {
+        for row in (-2..=2).rev() {
             for col in -2..=2 {
                 if self.mov.contains(&(col, row)) {
                     write!(f, "X")?;
