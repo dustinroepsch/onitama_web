@@ -2,6 +2,7 @@ use core::fmt;
 
 pub mod board;
 pub mod cards;
+pub mod game;
 pub mod piece;
 
 pub type Offset = (i8, i8);
@@ -20,7 +21,7 @@ impl fmt::Display for Color {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Card {
     name: &'static str,
     mov: Move,

@@ -24,6 +24,25 @@ pub enum CardId {
     Cobra,
 }
 
+pub static ALL_CARD_IDS: [CardId; 16] = [
+    CardId::Tiger,
+    CardId::Dragon,
+    CardId::Frog,
+    CardId::Rabbit,
+    CardId::Crab,
+    CardId::Elephant,
+    CardId::Goose,
+    CardId::Rooster,
+    CardId::Monkey,
+    CardId::Mantis,
+    CardId::Horse,
+    CardId::Ox,
+    CardId::Crane,
+    CardId::Boar,
+    CardId::Eel,
+    CardId::Cobra,
+];
+
 impl CardId {
     pub fn get(&self) -> &'static Card {
         CARDS.get(self).unwrap()

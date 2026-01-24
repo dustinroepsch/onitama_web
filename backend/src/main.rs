@@ -1,14 +1,7 @@
-use onitama::onitama::{
-    board::Board,
-    cards::{CARDS, CardId},
-};
+use onitama::onitama::game::Game;
 
 fn main() {
-    for (card_id, card) in CARDS.iter() {
-        println!("cardId:{:?}\n{}", card_id, card)
-    }
+    let game = Game::new();
 
-    println!("{}", CardId::Mantis.get());
-
-    println!("{}", Board::new())
+    println!("{}", game)
 }

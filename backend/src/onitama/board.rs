@@ -10,6 +10,7 @@ pub enum Cell {
     Taken(Piece),
 }
 
+#[derive(Debug)]
 pub struct Board {
     grid: [[Cell; 5]; 5],
 }
