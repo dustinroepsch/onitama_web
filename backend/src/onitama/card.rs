@@ -1,7 +1,7 @@
 use core::fmt;
 pub type Offset = (i8, i8);
 
-pub type Move = Vec<Offset>;
+pub type Moves = Vec<Offset>;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum Color {
@@ -18,8 +18,21 @@ impl fmt::Display for Color {
 #[derive(Debug, PartialEq, Eq)]
 pub struct Card {
     pub name: &'static str,
-    pub mov: Move,
+    pub moves: Moves,
+    pub rotated_moves: Moves,
     pub color: Color,
+}
+
+impl Card {
+    pub fn new(name: &'static str, moves: Moves, color: Color) -> Self {
+        Card {
+            name,
+            moves: moves.clone(),
+            //Todo: actually rotate the moves
+            rotated_moves: moves,
+            color,
+        }
+    }
 }
 
 impl fmt::Display for Card {
@@ -28,7 +41,7 @@ impl fmt::Display for Card {
         writeln!(f, "Color: {}", self.color)?;
         for row in -2..=2 {
             for col in -2..=2 {
-                if self.mov.contains(&(col, row)) {
+                if self.moves.contains(&(col, row)) {
                     write!(f, "X")?;
                 } else if row == 0 && col == 0 {
                     write!(f, "o")?;
