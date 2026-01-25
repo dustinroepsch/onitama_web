@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use crate::onitama::Card;
-use crate::onitama::Color;
+use crate::onitama::card::Card;
+use crate::onitama::card::Color;
 use lazy_static::lazy_static;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]

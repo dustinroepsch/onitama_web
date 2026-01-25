@@ -53,8 +53,8 @@ impl Game {
         let card_decides_player = deck.pop().unwrap();
 
         let (red_incoming, blue_incoming) = match card_decides_player.get().color {
-            super::Color::Red => (Some(card_decides_player), None),
-            super::Color::Blue => (None, Some(card_decides_player)),
+            super::card::Color::Red => (Some(card_decides_player), None),
+            super::card::Color::Blue => (None, Some(card_decides_player)),
         };
 
         Game {
