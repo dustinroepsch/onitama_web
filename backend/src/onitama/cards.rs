@@ -53,33 +53,33 @@ lazy_static! {
     pub static ref CARDS: HashMap<CardId, Card> = HashMap::from([
         (
             CardId::Tiger,
-            Card::new("Tiger", vec![(0, 1), (0, -2)], Color::Blue,)
+            Card::new("Tiger", vec![(1, 0), (-2, 0)], Color::Blue,)
         ),
         (
             CardId::Dragon,
             Card::new(
                 "Dragon",
-                vec![(-1, 1), (-2, -1), (2, -1), (1, 1)],
+                vec![(1, -1), (-1, -2), (-1, 2), (1, 1)],
                 Color::Red,
             )
         ),
         (
             CardId::Frog,
-            Card::new("Frog", vec![(-2, 0), (-1, -1), (1, 1)], Color::Red,)
+            Card::new("Frog", vec![(0, -2), (-1, -1), (1, 1)], Color::Red,)
         ),
         (
             CardId::Rabbit,
-            Card::new("Rabbit", vec![(-1, 1), (1, -1), (2, 0)], Color::Blue,)
+            Card::new("Rabbit", vec![(1, -1), (-1, 1), (0, 2)], Color::Blue,)
         ),
         (
             CardId::Crab,
-            Card::new("Crab", vec![(-2, 0), (0, -1), (2, 0)], Color::Blue,)
+            Card::new("Crab", vec![(0, -2), (-1, 0), (0, 2)], Color::Blue,)
         ),
         (
             CardId::Elephant,
             Card::new(
                 "Elephant",
-                vec![(-1, 0), (-1, -1), (1, 0), (1, -1)],
+                vec![(0, -1), (-1, -1), (0, 1), (-1, 1)],
                 Color::Red,
             )
         ),
@@ -87,7 +87,7 @@ lazy_static! {
             CardId::Goose,
             Card::new(
                 "Goose",
-                vec![(-1, 0), (-1, -1), (1, 0), (1, 1)],
+                vec![(0, -1), (-1, -1), (0, 1), (1, 1)],
                 Color::Blue,
             )
         ),
@@ -95,7 +95,7 @@ lazy_static! {
             CardId::Rooster,
             Card::new(
                 "Rooster",
-                vec![(-1, 0), (-1, 1), (1, 0), (1, -1)],
+                vec![(0, -1), (1, -1), (0, 1), (-1, 1)],
                 Color::Red,
             )
         ),
@@ -103,37 +103,37 @@ lazy_static! {
             CardId::Monkey,
             Card::new(
                 "Monkey",
-                vec![(1, -1), (-1, 1), (-1, -1), (1, 1)],
+                vec![(-1, 1), (1, -1), (-1, -1), (1, 1)],
                 Color::Blue,
             )
         ),
         (
             CardId::Mantis,
-            Card::new("Mantis", vec![(-1, -1), (0, 1), (1, -1)], Color::Red,)
+            Card::new("Mantis", vec![(-1, -1), (1, 0), (-1, 1)], Color::Red,)
         ),
         (
             CardId::Horse,
-            Card::new("Horse", vec![(-1, 0), (0, -1), (0, 1)], Color::Red,)
+            Card::new("Horse", vec![(0, -1), (-1, 0), (1, 0)], Color::Red,)
         ),
         (
             CardId::Ox,
-            Card::new("Ox", vec![(0, -1), (0, 1), (1, 0)], Color::Blue,)
+            Card::new("Ox", vec![(-1, 0), (1, 0), (0, 1)], Color::Blue,)
         ),
         (
             CardId::Crane,
-            Card::new("Crane", vec![(0, -1), (-1, 1), (1, 1)], Color::Blue,)
+            Card::new("Crane", vec![(-1, 0), (1, -1), (1, 1)], Color::Blue,)
         ),
         (
             CardId::Boar,
-            Card::new("Boar", vec![(-1, 0), (0, -1), (1, 0)], Color::Red,)
+            Card::new("Boar", vec![(0, -1), (-1, 0), (0, 1)], Color::Red,)
         ),
         (
             CardId::Eel,
-            Card::new("Eel", vec![(-1, -1), (-1, 1), (1, 0)], Color::Blue,)
+            Card::new("Eel", vec![(-1, -1), (1, -1), (0, 1)], Color::Blue,)
         ),
         (
             CardId::Cobra,
-            Card::new("Cobra", vec![(-1, 0), (1, -1), (1, 1)], Color::Red,)
+            Card::new("Cobra", vec![(0, -1), (-1, 1), (1, 1)], Color::Red,)
         ),
     ]);
 }

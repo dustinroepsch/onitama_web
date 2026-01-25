@@ -41,7 +41,7 @@ impl fmt::Display for Card {
         writeln!(f, "Color: {}", self.color)?;
         for row in -2..=2 {
             for col in -2..=2 {
-                if self.moves.contains(&(col, row)) {
+                if self.moves.contains(&(row, col)) {
                     write!(f, "X")?;
                 } else if row == 0 && col == 0 {
                     write!(f, "o")?;
