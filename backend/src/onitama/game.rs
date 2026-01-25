@@ -20,9 +20,22 @@ impl Display for Game {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "{}", self.board)?;
         writeln!(f, "Red Card:{:?}", self.red_cards)?;
+        for card in self.red_cards {
+            writeln!(f, "{}", card.get())?;
+        }
         writeln!(f, "Blue Card:{:?}", self.blue_cards)?;
+        for card in self.blue_cards {
+            writeln!(f, "{}", card.get())?;
+        }
         writeln!(f, "Red Incoming:{:?}", self.red_incoming)?;
-        writeln!(f, "Blue Incoming:{:?}", self.blue_incoming)
+        if let Some(card) = self.red_incoming {
+            writeln!(f, "{}", card.get())?;
+        }
+        writeln!(f, "Blue Incoming:{:?}", self.blue_incoming)?;
+        if let Some(card) = self.blue_incoming {
+            writeln!(f, "{}", card.get())?;
+        }
+        Ok(())
     }
 }
 
