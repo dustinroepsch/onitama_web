@@ -1,8 +1,8 @@
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 use crate::onitama::card::Card;
 use crate::onitama::card::Color;
-use lazy_static::lazy_static;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CardId {
@@ -49,11 +49,11 @@ impl CardId {
     }
 }
 
-lazy_static! {
-    pub static ref CARDS: HashMap<CardId, Card> = HashMap::from([
+pub static CARDS: LazyLock<HashMap<CardId, Card>> = LazyLock::new(|| {
+    HashMap::from([
         (
             CardId::Tiger,
-            Card::new("Tiger", vec![(1, 0), (-2, 0)], Color::Blue,)
+            Card::new("Tiger", vec![(1, 0), (-2, 0)], Color::Blue),
         ),
         (
             CardId::Dragon,
@@ -61,19 +61,19 @@ lazy_static! {
                 "Dragon",
                 vec![(1, -1), (-1, -2), (-1, 2), (1, 1)],
                 Color::Red,
-            )
+            ),
         ),
         (
             CardId::Frog,
-            Card::new("Frog", vec![(0, -2), (-1, -1), (1, 1)], Color::Red,)
+            Card::new("Frog", vec![(0, -2), (-1, -1), (1, 1)], Color::Red),
         ),
         (
             CardId::Rabbit,
-            Card::new("Rabbit", vec![(1, -1), (-1, 1), (0, 2)], Color::Blue,)
+            Card::new("Rabbit", vec![(1, -1), (-1, 1), (0, 2)], Color::Blue),
         ),
         (
             CardId::Crab,
-            Card::new("Crab", vec![(0, -2), (-1, 0), (0, 2)], Color::Blue,)
+            Card::new("Crab", vec![(0, -2), (-1, 0), (0, 2)], Color::Blue),
         ),
         (
             CardId::Elephant,
@@ -81,7 +81,7 @@ lazy_static! {
                 "Elephant",
                 vec![(0, -1), (-1, -1), (0, 1), (-1, 1)],
                 Color::Red,
-            )
+            ),
         ),
         (
             CardId::Goose,
@@ -89,7 +89,7 @@ lazy_static! {
                 "Goose",
                 vec![(0, -1), (-1, -1), (0, 1), (1, 1)],
                 Color::Blue,
-            )
+            ),
         ),
         (
             CardId::Rooster,
@@ -97,7 +97,7 @@ lazy_static! {
                 "Rooster",
                 vec![(0, -1), (1, -1), (0, 1), (-1, 1)],
                 Color::Red,
-            )
+            ),
         ),
         (
             CardId::Monkey,
@@ -105,35 +105,35 @@ lazy_static! {
                 "Monkey",
                 vec![(-1, 1), (1, -1), (-1, -1), (1, 1)],
                 Color::Blue,
-            )
+            ),
         ),
         (
             CardId::Mantis,
-            Card::new("Mantis", vec![(-1, -1), (1, 0), (-1, 1)], Color::Red,)
+            Card::new("Mantis", vec![(-1, -1), (1, 0), (-1, 1)], Color::Red),
         ),
         (
             CardId::Horse,
-            Card::new("Horse", vec![(0, -1), (-1, 0), (1, 0)], Color::Red,)
+            Card::new("Horse", vec![(0, -1), (-1, 0), (1, 0)], Color::Red),
         ),
         (
             CardId::Ox,
-            Card::new("Ox", vec![(-1, 0), (1, 0), (0, 1)], Color::Blue,)
+            Card::new("Ox", vec![(-1, 0), (1, 0), (0, 1)], Color::Blue),
         ),
         (
             CardId::Crane,
-            Card::new("Crane", vec![(-1, 0), (1, -1), (1, 1)], Color::Blue,)
+            Card::new("Crane", vec![(-1, 0), (1, -1), (1, 1)], Color::Blue),
         ),
         (
             CardId::Boar,
-            Card::new("Boar", vec![(0, -1), (-1, 0), (0, 1)], Color::Red,)
+            Card::new("Boar", vec![(0, -1), (-1, 0), (0, 1)], Color::Red),
         ),
         (
             CardId::Eel,
-            Card::new("Eel", vec![(-1, -1), (1, -1), (0, 1)], Color::Blue,)
+            Card::new("Eel", vec![(-1, -1), (1, -1), (0, 1)], Color::Blue),
         ),
         (
             CardId::Cobra,
-            Card::new("Cobra", vec![(0, -1), (-1, 1), (1, 1)], Color::Red,)
+            Card::new("Cobra", vec![(0, -1), (-1, 1), (1, 1)], Color::Red),
         ),
-    ]);
-}
+    ])
+});
