@@ -1,8 +1,4 @@
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub enum Color {
-    Red,
-    Blue,
-}
+use crate::onitama::Color;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum PieceType {

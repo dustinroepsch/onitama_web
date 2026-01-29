@@ -1,8 +1,9 @@
 use std::collections::HashMap;
+use std::fmt::Display;
 use std::sync::LazyLock;
 
+use crate::onitama::Color;
 use crate::onitama::card::Card;
-use crate::onitama::card::Color;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CardId {
@@ -22,6 +23,13 @@ pub enum CardId {
     Boar,
     Eel,
     Cobra,
+}
+
+impl Display for CardId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let name = self.get().name;
+        write!(f, "{name}")
+    }
 }
 
 pub static ALL_CARD_IDS: [CardId; 16] = [

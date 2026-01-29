@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::onitama::piece::Color;
+use crate::onitama::Color;
 use crate::onitama::piece::Piece;
 use crate::onitama::piece::PieceType::{King, Pawn};
 
@@ -12,7 +12,7 @@ pub enum Cell {
 
 #[derive(Debug)]
 pub struct Board {
-    grid: [[Cell; 5]; 5],
+    pub grid: [[Cell; 5]; 5],
 }
 
 impl Default for Board {
@@ -62,4 +62,12 @@ impl Display for Board {
 
         Ok(())
     }
+}
+
+pub fn in_bounds(y: i8, x: i8) -> bool {
+    y >= 0 && y < 5 && x >= 0 && x < 5
+}
+
+pub fn coord_in_bounds((y, x): (i8, i8)) -> bool {
+    in_bounds(y, x)
 }
