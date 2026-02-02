@@ -19,7 +19,7 @@ impl Card {
         let rotated_moves: Vec<_> = moves.iter().map(|(y, x)| (y * -1, x * -1)).collect();
         Card {
             name,
-            moves: moves,
+            moves,
             //Todo: actually rotate the moves
             rotated_moves,
             color,

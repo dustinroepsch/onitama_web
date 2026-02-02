@@ -3,6 +3,7 @@ use std::fmt;
 pub mod board;
 pub mod card;
 pub mod cards;
+pub mod coordinate;
 pub mod game;
 pub mod piece;
 

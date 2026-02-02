@@ -69,7 +69,7 @@ impl Game {
     }
 
     pub fn current_player(&self) -> Color {
-        if let Some(_) = self.red_incoming {
+        if self.red_incoming.is_some() {
             Color::Red
         } else {
             Color::Blue
