@@ -69,6 +69,25 @@ impl Game {
         }
     }
 
+    pub fn new_with_cards(
+        red_cards: [CardId; 2],
+        blue_cards: [CardId; 2],
+        incoming: CardId,
+    ) -> Self {
+        let (red_incoming, blue_incoming) = match incoming.get().color {
+            Color::Red => (Some(incoming), None),
+            Color::Blue => (None, Some(incoming)),
+        };
+
+        Game {
+            board: Board::new(),
+            red_incoming,
+            blue_incoming,
+            red_cards,
+            blue_cards,
+        }
+    }
+
     pub fn current_player(&self) -> Color {
         if self.red_incoming.is_some() {
             Color::Red
@@ -137,4 +156,90 @@ pub struct Action {
     from: Coordinate,
     to: Coordinate,
     card: CardId,
+}
+
+impl Action {
+    pub fn new(from: Coordinate, to: Coordinate, card: CardId) -> Self {
+        Self { from, to, card }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn coord(y: u8, x: u8) -> Coordinate {
+        (y, x).try_into().unwrap()
+    }
+
+    fn red_turn_game() -> Game {
+        // Dragon is Red-colored, so red_incoming = Some → Red's turn
+        Game::new_with_cards(
+            [CardId::Tiger, CardId::Frog],
+            [CardId::Rabbit, CardId::Crab],
+            CardId::Dragon,
+        )
+    }
+
+    fn blue_turn_game() -> Game {
+        // Tiger is Blue-colored, so blue_incoming = Some → Blue's turn
+        Game::new_with_cards(
+            [CardId::Dragon, CardId::Frog],
+            [CardId::Rabbit, CardId::Crab],
+            CardId::Tiger,
+        )
+    }
+
+    #[test]
+    fn new_with_cards_red_goes_first() {
+        let game = red_turn_game();
+        assert_eq!(game.current_player(), Color::Red);
+    }
+
+    #[test]
+    fn new_with_cards_blue_goes_first() {
+        let game = blue_turn_game();
+        assert_eq!(game.current_player(), Color::Blue);
+    }
+
+    #[test]
+    fn act_with_valid_card_and_piece() {
+        let mut game = red_turn_game();
+        // Red piece at (0, 0), using Tiger which Red holds, move to (1, 0)
+        let action = Action::new(coord(0, 0), coord(1, 0), CardId::Tiger);
+        assert!(game.act(&action).is_ok());
+    }
+
+    #[test]
+    fn act_wrong_card() {
+        let mut game = red_turn_game();
+        // Rabbit belongs to Blue, not Red
+        let action = Action::new(coord(0, 0), coord(1, 0), CardId::Rabbit);
+        let err = game.act(&action).unwrap_err();
+        assert!(matches!(err, ActError::ActivePlayerDoesntHaveCard { .. }));
+    }
+
+    #[test]
+    fn act_empty_from() {
+        let mut game = red_turn_game();
+        // (2, 2) is an empty square in the middle of the board
+        let action = Action::new(coord(2, 2), coord(3, 2), CardId::Tiger);
+        let err = game.act(&action).unwrap_err();
+        assert!(matches!(
+            err,
+            ActError::ActivePlayerDoesntHavePieceAtFromPosition { .. }
+        ));
+    }
+
+    #[test]
+    fn act_opponent_piece_at_from() {
+        let mut game = red_turn_game();
+        // (4, 0) has a Blue piece; Red can't move it
+        let action = Action::new(coord(4, 0), coord(3, 0), CardId::Tiger);
+        let err = game.act(&action).unwrap_err();
+        assert!(matches!(
+            err,
+            ActError::ActivePlayerDoesntHavePieceAtFromPosition { .. }
+        ));
+    }
 }
