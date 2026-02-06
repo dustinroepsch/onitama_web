@@ -92,7 +92,7 @@ impl Game {
             });
         }
 
-        match self.board.grid[action.from.y as usize][action.from.x as usize] {
+        match self.board.get(action.from) {
             super::board::Cell::Empty => {
                 return Err(ActError::ActivePlayerDoesntHavePieceAtFromPosition {
                     active_player_color,
