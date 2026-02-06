@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo test:*)",
+      "Bash(cargo build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor to use Coordinate and Offset types instead of raw tuples\n\nReplace raw \\(i8, i8\\) tuples with the Coordinate and Offset structs from\ncoordinate.rs, removing redundant bounds-checking functions and error\nvariants that are now enforced at the type level.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
+    ]
+  }
+}
