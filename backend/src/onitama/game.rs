@@ -5,8 +5,9 @@ use thiserror::Error;
 
 use crate::onitama::{
     Color,
-    board::{Board, coord_in_bounds},
+    board::Board,
     cards::{ALL_CARD_IDS, CardId},
+    coordinate::Coordinate,
 };
 
 #[derive(Debug)]
@@ -77,19 +78,6 @@ impl Game {
     }
 
     pub fn act(&mut self, action: &Action) -> Result<(), ActError> {
-        if !coord_in_bounds(action.from) {
-            return Err(ActError::FromPositionOutOfBounds {
-                y: action.from.0,
-                x: action.from.1,
-            });
-        }
-        if !coord_in_bounds(action.to) {
-            return Err(ActError::ToPositionOutOfBounds {
-                y: action.to.0,
-                x: action.to.1,
-            });
-        }
-
         let active_player_color = self.current_player();
 
         let active_cards = match active_player_color {
@@ -104,20 +92,20 @@ impl Game {
             });
         }
 
-        match self.board.grid[action.from.0 as usize][action.from.1 as usize] {
+        match self.board.grid[action.from.y as usize][action.from.x as usize] {
             super::board::Cell::Empty => {
                 return Err(ActError::ActivePlayerDoesntHavePieceAtFromPosition {
                     active_player_color,
-                    y: action.from.0,
-                    x: action.from.1,
+                    y: action.from.y,
+                    x: action.from.x,
                 });
             }
             super::board::Cell::Taken(piece) => {
                 if piece.color != active_player_color {
                     return Err(ActError::ActivePlayerDoesntHavePieceAtFromPosition {
                         active_player_color,
-                        y: action.from.0,
-                        x: action.from.1,
+                        y: action.from.y,
+                        x: action.from.x,
                     });
                 }
             }
@@ -129,10 +117,6 @@ impl Game {
 
 #[derive(Error, Debug)]
 pub enum ActError {
-    #[error("the `from` coordinate ({y}, {x}) is out of bounds")]
-    FromPositionOutOfBounds { y: i8, x: i8 },
-    #[error("the `to` coordinate ({y}, {x}) is out of bounds")]
-    ToPositionOutOfBounds { y: i8, x: i8 },
     #[error("the active player ({active_player_color}) doesn't have card ({card})")]
     ActivePlayerDoesntHaveCard {
         active_player_color: Color,
@@ -143,14 +127,14 @@ pub enum ActError {
     )]
     ActivePlayerDoesntHavePieceAtFromPosition {
         active_player_color: Color,
-        y: i8,
-        x: i8,
+        y: u8,
+        x: u8,
     },
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Action {
-    from: (i8, i8),
-    to: (i8, i8),
+    from: Coordinate,
+    to: Coordinate,
     card: CardId,
 }

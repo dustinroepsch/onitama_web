@@ -63,11 +63,3 @@ impl Display for Board {
         Ok(())
     }
 }
-
-pub fn in_bounds(y: i8, x: i8) -> bool {
-    (0..5).contains(&y) && (0..5).contains(&x)
-}
-
-pub fn coord_in_bounds((y, x): (i8, i8)) -> bool {
-    in_bounds(y, x)
-}

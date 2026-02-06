@@ -1,8 +1,7 @@
 use core::fmt;
 
 use crate::onitama::Color;
-
-pub type Offset = (i8, i8);
+use crate::onitama::coordinate::Offset;
 
 pub type Moves = Vec<Offset>;
 
@@ -16,7 +15,13 @@ pub struct Card {
 
 impl Card {
     pub fn new(name: &'static str, moves: Moves, color: Color) -> Self {
-        let rotated_moves: Vec<_> = moves.iter().map(|(y, x)| (y * -1, x * -1)).collect();
+        let rotated_moves: Vec<_> = moves
+            .iter()
+            .map(|o| Offset {
+                y: -o.y,
+                x: -o.x,
+            })
+            .collect();
         Card {
             name,
             moves,
@@ -34,7 +39,7 @@ impl fmt::Display for Card {
         writeln!(f, "Moves: ")?;
         for row in -2..=2 {
             for col in -2..=2 {
-                if self.moves.contains(&(row, col)) {
+                if self.moves.contains(&Offset { y: row, x: col }) {
                     write!(f, "X")?;
                 } else if row == 0 && col == 0 {
                     write!(f, "o")?;
@@ -47,7 +52,7 @@ impl fmt::Display for Card {
         writeln!(f, "Rotated Moves: ")?;
         for row in -2..=2 {
             for col in -2..=2 {
-                if self.rotated_moves.contains(&(row, col)) {
+                if self.rotated_moves.contains(&Offset { y: row, x: col }) {
                     write!(f, "X")?;
                 } else if row == 0 && col == 0 {
                     write!(f, "o")?;
