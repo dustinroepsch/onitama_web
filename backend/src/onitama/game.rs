@@ -52,11 +52,14 @@ impl Game {
     pub fn new() -> Self {
         let mut deck: Vec<CardId> = ALL_CARD_IDS.to_vec();
         deck.shuffle(&mut rand::rng());
+        Game::new_using_deck(&deck[..5])
+    }
 
-        let card_draw_expect_message: &'static str =
-            "There are enough cards in the deck to setup the game.";
-
-        let card_decides_player = deck.pop().expect(card_draw_expect_message);
+    pub fn new_using_deck(deck: &[CardId]) -> Self {
+        if deck.len() < 5 {
+            panic!("Tried to create game with a deck using less than 5 cards")
+        }
+        let card_decides_player = deck[0];
 
         let (red_incoming, blue_incoming) = match card_decides_player.get().color {
             Color::Red => (Some(card_decides_player), None),
@@ -67,33 +70,8 @@ impl Game {
             board: Board::new(),
             red_incoming,
             blue_incoming,
-            red_cards: [
-                deck.pop().expect(card_draw_expect_message),
-                deck.pop().expect(card_draw_expect_message),
-            ],
-            blue_cards: [
-                deck.pop().expect(card_draw_expect_message),
-                deck.pop().expect(card_draw_expect_message),
-            ],
-        }
-    }
-
-    pub fn new_with_cards(
-        red_cards: [CardId; 2],
-        blue_cards: [CardId; 2],
-        incoming: CardId,
-    ) -> Self {
-        let (red_incoming, blue_incoming) = match incoming.get().color {
-            Color::Red => (Some(incoming), None),
-            Color::Blue => (None, Some(incoming)),
-        };
-
-        Game {
-            board: Board::new(),
-            red_incoming,
-            blue_incoming,
-            red_cards,
-            blue_cards,
+            red_cards: [deck[1], deck[2]],
+            blue_cards: [deck[3], deck[4]],
         }
     }
 
@@ -201,20 +179,24 @@ mod tests {
 
     fn red_turn_game() -> Game {
         // Dragon is Red-colored, so red_incoming = Some → Red's turn
-        Game::new_with_cards(
-            [CardId::Tiger, CardId::Frog],
-            [CardId::Rabbit, CardId::Crab],
+        Game::new_using_deck(&[
             CardId::Dragon,
-        )
+            CardId::Tiger,
+            CardId::Frog,
+            CardId::Rabbit,
+            CardId::Crab,
+        ])
     }
 
     fn blue_turn_game() -> Game {
         // Tiger is Blue-colored, so blue_incoming = Some → Blue's turn
-        Game::new_with_cards(
-            [CardId::Dragon, CardId::Frog],
-            [CardId::Rabbit, CardId::Crab],
+        Game::new_using_deck(&[
             CardId::Tiger,
-        )
+            CardId::Frog,
+            CardId::Rabbit,
+            CardId::Crab,
+            CardId::Dragon,
+        ])
     }
 
     #[test]
