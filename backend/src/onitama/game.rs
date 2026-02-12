@@ -53,7 +53,10 @@ impl Game {
         let mut deck: Vec<CardId> = ALL_CARD_IDS.to_vec();
         deck.shuffle(&mut rand::rng());
 
-        let card_decides_player = deck.pop().unwrap();
+        let card_draw_expect_message: &'static str =
+            "There are enough cards in the deck to setup the game.";
+
+        let card_decides_player = deck.pop().expect(card_draw_expect_message);
 
         let (red_incoming, blue_incoming) = match card_decides_player.get().color {
             Color::Red => (Some(card_decides_player), None),
@@ -64,8 +67,14 @@ impl Game {
             board: Board::new(),
             red_incoming,
             blue_incoming,
-            red_cards: [deck.pop().unwrap(), deck.pop().unwrap()],
-            blue_cards: [deck.pop().unwrap(), deck.pop().unwrap()],
+            red_cards: [
+                deck.pop().expect(card_draw_expect_message),
+                deck.pop().expect(card_draw_expect_message),
+            ],
+            blue_cards: [
+                deck.pop().expect(card_draw_expect_message),
+                deck.pop().expect(card_draw_expect_message),
+            ],
         }
     }
 
