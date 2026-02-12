@@ -48,19 +48,31 @@ impl Default for Game {
     }
 }
 
+#[derive(Debug)]
+pub struct GameStartingState {
+    card_decides_player: CardId,
+    red_cards: [CardId; 2],
+    blue_cards: [CardId; 2],
+}
+
 impl Game {
     pub fn new() -> Self {
         let mut deck: Vec<CardId> = ALL_CARD_IDS.to_vec();
         deck.shuffle(&mut rand::rng());
-        Game::new_using_deck(&deck)
+        Game::new_pre_determined(GameStartingState {
+            card_decides_player: deck.pop().unwrap(),
+            red_cards: [deck.pop().unwrap(), deck.pop().unwrap()],
+            blue_cards: [deck.pop().unwrap(), deck.pop().unwrap()],
+        })
     }
 
-    pub fn new_using_deck(deck: &[CardId]) -> Self {
-        if deck.len() < 5 {
-            panic!("Tried to create game with a deck using less than 5 cards")
-        }
-        let card_decides_player = deck[0];
-
+    pub fn new_pre_determined(
+        GameStartingState {
+            card_decides_player,
+            red_cards,
+            blue_cards,
+        }: GameStartingState,
+    ) -> Self {
         let (red_incoming, blue_incoming) = match card_decides_player.get().color {
             Color::Red => (Some(card_decides_player), None),
             Color::Blue => (None, Some(card_decides_player)),
@@ -70,8 +82,8 @@ impl Game {
             board: Board::new(),
             red_incoming,
             blue_incoming,
-            red_cards: [deck[1], deck[2]],
-            blue_cards: [deck[3], deck[4]],
+            red_cards,
+            blue_cards,
         }
     }
 
@@ -133,7 +145,7 @@ impl Game {
     }
 }
 
-#[derive(Error, Debug)]
+#[derive(Error, Debug, PartialEq, Eq)]
 pub enum ActError {
     #[error("the active player ({active_player_color}) doesn't have card ({card})")]
     ActivePlayerDoesntHaveCard {
@@ -179,24 +191,20 @@ mod tests {
 
     fn red_turn_game() -> Game {
         // Dragon is Red-colored, so red_incoming = Some → Red's turn
-        Game::new_using_deck(&[
-            CardId::Dragon,
-            CardId::Tiger,
-            CardId::Frog,
-            CardId::Rabbit,
-            CardId::Crab,
-        ])
+        Game::new_pre_determined(GameStartingState {
+            card_decides_player: CardId::Dragon,
+            red_cards: [CardId::Frog, CardId::Tiger],
+            blue_cards: [CardId::Crab, CardId::Boar],
+        })
     }
 
     fn blue_turn_game() -> Game {
         // Tiger is Blue-colored, so blue_incoming = Some → Blue's turn
-        Game::new_using_deck(&[
-            CardId::Tiger,
-            CardId::Frog,
-            CardId::Rabbit,
-            CardId::Crab,
-            CardId::Dragon,
-        ])
+        Game::new_pre_determined(GameStartingState {
+            card_decides_player: CardId::Tiger,
+            red_cards: [CardId::Frog, CardId::Rabbit],
+            blue_cards: [CardId::Crab, CardId::Boar],
+        })
     }
 
     #[test]
@@ -220,24 +228,53 @@ mod tests {
     }
 
     #[test]
+    fn act_with_valid_card_and_invalid_move() {
+        let mut game = red_turn_game();
+        // Red piece at (0, 0), using Tiger which Red holds, move to (1, 1), which Tiger doesn't allow you to do.
+        let from = coord(0, 0);
+        let to = coord(1, 1);
+        let action = Action::new(from, to, CardId::Tiger);
+        assert_eq!(
+            game.act(&action),
+            Err(ActError::ChosenCardDoesntHaveMove {
+                card_id: CardId::Tiger,
+                from,
+                to
+            })
+        );
+    }
+
+    #[test]
     fn act_wrong_card() {
         let mut game = red_turn_game();
         // Rabbit belongs to Blue, not Red
         let action = Action::new(coord(0, 0), coord(1, 0), CardId::Rabbit);
-        let err = game.act(&action).unwrap_err();
-        assert!(matches!(err, ActError::ActivePlayerDoesntHaveCard { .. }));
+        let result = game.act(&action);
+        assert_eq!(
+            result,
+            Err(ActError::ActivePlayerDoesntHaveCard {
+                active_player_color: Color::Red,
+                card: CardId::Rabbit
+            })
+        );
     }
 
     #[test]
     fn act_empty_from() {
         let mut game = red_turn_game();
         // (2, 2) is an empty square in the middle of the board
-        let action = Action::new(coord(2, 2), coord(3, 2), CardId::Tiger);
-        let err = game.act(&action).unwrap_err();
-        assert!(matches!(
-            err,
-            ActError::ActivePlayerDoesntHavePieceAtFromPosition { .. }
-        ));
+        let from = coord(2, 2);
+        let to = coord(3, 2);
+        let action = Action::new(from, to, CardId::Tiger);
+        let result = game.act(&action);
+        assert_eq!(
+            result,
+            Err(ActError::ActivePlayerDoesntHavePieceAtFromPosition {
+                active_player_color: Color::Red,
+                y: 2,
+                x: 2,
+            })
+        )
     }
 
     #[test]
@@ -245,10 +282,14 @@ mod tests {
         let mut game = red_turn_game();
         // (4, 0) has a Blue piece; Red can't move it
         let action = Action::new(coord(4, 0), coord(3, 0), CardId::Tiger);
-        let err = game.act(&action).unwrap_err();
-        assert!(matches!(
-            err,
-            ActError::ActivePlayerDoesntHavePieceAtFromPosition { .. }
-        ));
+        let result = game.act(&action);
+        assert_eq!(
+            result,
+            Err(ActError::ActivePlayerDoesntHavePieceAtFromPosition {
+                active_player_color: Color::Red,
+                y: 4,
+                x: 0,
+            })
+        )
     }
 }
