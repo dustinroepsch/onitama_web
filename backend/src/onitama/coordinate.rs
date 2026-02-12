@@ -84,51 +84,56 @@ impl Coordinate {
     }
 }
 
-#[test]
-pub fn try_into_coordinate_success_u8() {
-    let tuple: (u8, u8) = (3, 0);
-    let coord: Result<Coordinate, _> = tuple.try_into();
-    assert_eq!(coord, Ok(Coordinate { y: 3, x: 0 }))
-}
-#[test]
-pub fn try_into_coordinate_fail_u8() {
-    let tuple: (u8, u8) = (5, 0);
-    let coord: Result<Coordinate, _> = tuple.try_into();
-    assert_eq!(coord, Err(IntoCoordinateError::UnsignedOutOfBounds(5, 0)))
-}
+#[cfg(test)]
 
-#[test]
-pub fn try_into_coordinate_success_i8() {
-    let tuple: (i8, i8) = (0, 4);
-    let coord: Result<Coordinate, _> = tuple.try_into();
-    assert_eq!(coord, Ok(Coordinate { y: 0, x: 4 }))
-}
-#[test]
-pub fn try_into_coordinate_fail_i8() {
-    let tuple: (i8, i8) = (4, -1);
-    let coord: Result<Coordinate, _> = tuple.try_into();
-    assert_eq!(coord, Err(IntoCoordinateError::SignedOutOFBounds(4, -1)))
-}
+pub mod tests {
+    use super::*;
+    #[test]
+    pub fn try_into_coordinate_success_u8() {
+        let tuple: (u8, u8) = (3, 0);
+        let coord: Result<Coordinate, _> = tuple.try_into();
+        assert_eq!(coord, Ok(Coordinate { y: 3, x: 0 }))
+    }
+    #[test]
+    pub fn try_into_coordinate_fail_u8() {
+        let tuple: (u8, u8) = (5, 0);
+        let coord: Result<Coordinate, _> = tuple.try_into();
+        assert_eq!(coord, Err(IntoCoordinateError::UnsignedOutOfBounds(5, 0)))
+    }
 
-#[test]
-pub fn add_offsets() {
-    let a: Offset = (-10, 5).into();
-    let b: Offset = (5, -2).into();
-    assert_eq!(a + b, Offset { y: -5, x: 3 })
-}
+    #[test]
+    pub fn try_into_coordinate_success_i8() {
+        let tuple: (i8, i8) = (0, 4);
+        let coord: Result<Coordinate, _> = tuple.try_into();
+        assert_eq!(coord, Ok(Coordinate { y: 0, x: 4 }))
+    }
+    #[test]
+    pub fn try_into_coordinate_fail_i8() {
+        let tuple: (i8, i8) = (4, -1);
+        let coord: Result<Coordinate, _> = tuple.try_into();
+        assert_eq!(coord, Err(IntoCoordinateError::SignedOutOFBounds(4, -1)))
+    }
 
-#[test]
-pub fn add_coord_offset_succeed() {
-    let a: Coordinate = (0u8, 2u8).try_into().expect("(0, 2) is a valid coordinate");
-    let offset: Offset = (1, 2).into();
+    #[test]
+    pub fn add_offsets() {
+        let a: Offset = (-10, 5).into();
+        let b: Offset = (5, -2).into();
+        assert_eq!(a + b, Offset { y: -5, x: 3 })
+    }
 
-    assert_eq!(a.try_add(&offset), Some(Coordinate { y: 1, x: 4 }))
-}
+    #[test]
+    pub fn add_coord_offset_succeed() {
+        let a: Coordinate = (0u8, 2u8).try_into().expect("(0, 2) is a valid coordinate");
+        let offset: Offset = (1, 2).into();
 
-#[test]
-pub fn add_coord_offset_fail() {
-    let a: Coordinate = (0u8, 2u8).try_into().expect("(0, 2) is a valid coordinate");
-    let offset: Offset = (-1, 2).into();
+        assert_eq!(a.try_add(&offset), Some(Coordinate { y: 1, x: 4 }))
+    }
 
-    assert_eq!(a.try_add(&offset), None)
+    #[test]
+    pub fn add_coord_offset_fail() {
+        let a: Coordinate = (0u8, 2u8).try_into().expect("(0, 2) is a valid coordinate");
+        let offset: Offset = (-1, 2).into();
+
+        assert_eq!(a.try_add(&offset), None)
+    }
 }
