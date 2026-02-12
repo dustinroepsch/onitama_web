@@ -52,7 +52,7 @@ impl Game {
     pub fn new() -> Self {
         let mut deck: Vec<CardId> = ALL_CARD_IDS.to_vec();
         deck.shuffle(&mut rand::rng());
-        Game::new_using_deck(&deck[..5])
+        Game::new_using_deck(&deck)
     }
 
     pub fn new_using_deck(deck: &[CardId]) -> Self {
