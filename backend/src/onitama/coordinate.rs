@@ -1,4 +1,4 @@
-use std::ops::Add;
+use std::{fmt::Display, ops::Add};
 
 use thiserror::Error;
 
@@ -6,6 +6,12 @@ use thiserror::Error;
 pub struct Coordinate {
     pub y: u8,
     pub x: u8,
+}
+
+impl Display for Coordinate {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "({}, {})", self.y, self.x)
+    }
 }
 
 #[derive(Error, Debug, PartialEq, Eq)]

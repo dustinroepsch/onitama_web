@@ -5,7 +5,7 @@ use thiserror::Error;
 
 use crate::onitama::{
     Color,
-    board::Board,
+    board::{Board, Cell},
     cards::{ALL_CARD_IDS, CardId},
     coordinate::Coordinate,
 };
@@ -130,7 +130,19 @@ impl Game {
             }
         }
 
-        Ok(())
+        for offset in &action.card.get().moves {
+            if action.from.try_add(offset) == Some(action.to) {
+                *self.board.get_mut(action.to) = self.board.get(action.from).to_owned();
+                *self.board.get_mut(action.from) = Cell::Empty;
+                return Ok(());
+            }
+        }
+
+        Err(ActError::ChosenCardDoesntHaveMove {
+            card_id: action.card,
+            from: action.from,
+            to: action.to,
+        })
     }
 }
 
@@ -148,6 +160,12 @@ pub enum ActError {
         active_player_color: Color,
         y: u8,
         x: u8,
+    },
+    #[error("The card {card_id} doesn't move from {from} to {to}")]
+    ChosenCardDoesntHaveMove {
+        card_id: CardId,
+        from: Coordinate,
+        to: Coordinate,
     },
 }
 
