@@ -133,6 +133,27 @@ impl Game {
             if action.from.try_add(offset) == Some(action.to) {
                 *self.board.get_mut(action.to) = self.board.get(action.from).to_owned();
                 *self.board.get_mut(action.from) = Cell::Empty;
+
+                let (active_player_incoming, active_player_cards, next_player_incoming) =
+                    match active_player_color {
+                        Color::Red => (
+                            &mut self.red_incoming,
+                            &mut self.red_cards,
+                            &mut self.blue_incoming,
+                        ),
+                        Color::Blue => (
+                            &mut self.blue_incoming,
+                            &mut self.blue_cards,
+                            &mut self.red_incoming,
+                        ),
+                    };
+
+                let location_of_card_just_played = active_player_cards.iter_mut().find(|c| **c == action.card).expect("We should be able to find the card just played in the active players cards");
+
+                *location_of_card_just_played = active_player_incoming.expect("We just played a card, therefore we should have a new card available to replace it.");
+                *active_player_incoming = None;
+                *next_player_incoming = Some(action.card);
+
                 return Ok(());
             }
         }
@@ -183,6 +204,8 @@ impl Action {
 
 #[cfg(test)]
 mod tests {
+    use crate::onitama::piece::{Piece, PieceType};
+
     use super::*;
 
     fn coord(y: u8, x: u8) -> Coordinate {
@@ -225,6 +248,12 @@ mod tests {
         // Red piece at (0, 0), using Tiger which Red holds, move to (1, 0)
         let action = Action::new(coord(0, 0), coord(1, 0), CardId::Tiger);
         assert!(game.act(&action).is_ok());
+        assert_eq!(game.current_player(), Color::Blue);
+        assert_eq!(*game.board.get(coord(0, 0)), Cell::Empty);
+        assert_eq!(
+            *game.board.get(coord(1, 0)),
+            Cell::Taken(Piece::new(PieceType::Pawn, Color::Red))
+        );
     }
 
     #[test]
