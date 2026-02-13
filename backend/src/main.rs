@@ -15,17 +15,6 @@ use tracing_subscriber::prelude::*;
 
 #[tokio::main]
 async fn main() {
-    println!("Example Action:");
-    println!(
-        "{}",
-        serde_json::to_string_pretty(&Action {
-            from: (1u8, 2u8).try_into().unwrap(),
-            to: (3u8, 4u8).try_into().unwrap(),
-            card: CardId::Dragon
-        })
-        .unwrap()
-    );
-
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
