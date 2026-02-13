@@ -1,5 +1,6 @@
 use std::{
     collections::HashMap,
+    fmt::Display,
     sync::{Arc, Mutex},
 };
 
@@ -25,6 +26,12 @@ impl State {
 
 pub struct Instance {
     game: Mutex<Game>,
+}
+
+impl Display for Instance {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "{}", self.game.lock().unwrap())
+    }
 }
 
 impl Instance {

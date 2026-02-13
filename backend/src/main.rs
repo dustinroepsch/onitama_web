@@ -46,6 +46,7 @@ async fn main() {
     let app = Router::new()
         .route("/room/{room_id}", get(get_game))
         .route("/act/{room_id}", post(post_action))
+        .route("/display/{room_id}", get(get_game_display))
         .layer(TraceLayer::new_for_http())
         .with_state(shared_state);
 
@@ -63,4 +64,11 @@ async fn post_action(
     Json(action): Json<Action>,
 ) -> Json<Result<(), ActError>> {
     Json(state.make_or_get(room_id).act(&action))
+}
+
+async fn get_game_display(
+    State(state): State<Arc<AppState>>,
+    Path(room_id): Path<String>,
+) -> String {
+    format!("{}", state.make_or_get(room_id))
 }
