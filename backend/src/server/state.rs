@@ -1,15 +1,15 @@
 use std::{
     collections::HashMap,
-    sync::{Arc, Mutex, RwLock},
+    sync::{Arc, Mutex},
 };
 
 use crate::onitama::game::Game;
 
-struct State {
+pub struct State {
     id_to_game: Mutex<HashMap<String, Arc<Instance>>>,
 }
 
-struct Instance {
+pub struct Instance {
     game: Mutex<Game>,
 }
 
@@ -22,7 +22,7 @@ impl Instance {
 }
 
 impl State {
-    fn make_or_get(&self, id: String) -> Arc<Instance> {
+    pub fn make_or_get(&self, id: String) -> Arc<Instance> {
         self.id_to_game
             .lock()
             .expect("We should never poision this lock")

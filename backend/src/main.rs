@@ -1,5 +1,4 @@
 use onitama::onitama::game::Game;
-use serde_json;
 
 fn main() {
     let game = Game::new();
