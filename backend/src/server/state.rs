@@ -3,10 +3,18 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use crate::onitama::game::Game;
+use crate::onitama::game::{ActError, Action, Game};
 
 pub struct State {
     id_to_game: Mutex<HashMap<String, Arc<Instance>>>,
+}
+
+impl State {
+    pub fn new() -> Self {
+        Self {
+            id_to_game: Mutex::default(),
+        }
+    }
 }
 
 pub struct Instance {
@@ -19,6 +27,19 @@ impl Instance {
             game: Mutex::default(),
         }
     }
+    pub fn act(&self, action: &Action) -> Result<(), ActError> {
+        self.game
+            .lock()
+            .expect("We should not poision any mutex")
+            .act(action)
+    }
+
+    pub fn clone_game(&self) -> Game {
+        self.game
+            .lock()
+            .expect("We should not poision any mutex")
+            .clone()
+    }
 }
 
 impl State {
@@ -28,6 +49,6 @@ impl State {
             .expect("We should never poision this lock")
             .entry(id)
             .or_insert_with(|| Arc::new(Instance::new()))
-            .to_owned()
+            .clone()
     }
 }

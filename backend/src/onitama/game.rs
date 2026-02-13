@@ -11,7 +11,7 @@ use crate::onitama::{
     coordinate::Coordinate,
 };
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Game {
     board: Board,
     red_incoming: Option<CardId>,

@@ -12,7 +12,7 @@ pub enum Cell {
     Taken(Piece),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Board {
     grid: [[Cell; 5]; 5],
 }
