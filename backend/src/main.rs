@@ -3,16 +3,36 @@ use std::sync::Arc;
 use axum::{
     Json, Router,
     extract::{Path, State},
+    middleware,
     routing::get,
 };
 use onitama::{onitama::game::Game, server::state::State as AppState};
+use tower::ServiceBuilder;
+use tower_http::trace::TraceLayer;
+use tracing_subscriber::prelude::*;
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                // axum logs rejections from built-in extractors with the `axum::rejection`
+                // target, at `TRACE` level. `axum::rejection=trace` enables showing those events
+                format!(
+                    "{}=debug,tower_http=debug,axum::rejection=trace",
+                    env!("CARGO_CRATE_NAME")
+                )
+                .into()
+            }),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+
     let shared_state = Arc::new(AppState::new());
 
     let app = Router::new()
         .route("/room/{room_id}/", get(get_game))
+        .layer(TraceLayer::new_for_http())
         .with_state(shared_state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
