@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 use rand::seq::SliceRandom;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::onitama::{
@@ -167,7 +167,7 @@ impl Game {
     }
 }
 
-#[derive(Error, Debug, PartialEq, Eq)]
+#[derive(Error, Debug, PartialEq, Eq, Serialize)]
 pub enum ActError {
     #[error("the active player ({active_player_color}) doesn't have card ({card})")]
     ActivePlayerDoesntHaveCard {
@@ -190,11 +190,11 @@ pub enum ActError {
     },
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Action {
-    from: Coordinate,
-    to: Coordinate,
-    card: CardId,
+    pub from: Coordinate,
+    pub to: Coordinate,
+    pub card: CardId,
 }
 
 impl Action {

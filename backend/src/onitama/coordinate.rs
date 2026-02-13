@@ -1,8 +1,9 @@
 use std::{fmt::Display, ops::Add};
 
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Coordinate {
     pub y: u8,
     pub x: u8,

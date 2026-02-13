@@ -1,0 +1,34 @@
+meta {
+  name: act room 1
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/act/1
+  body: json
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+body:json {
+  {
+    "from": {
+      "y": 1,
+      "x": 2
+    },
+    "to": {
+      "y": 3,
+      "x": 4
+    },
+    "card": "Dragon"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
