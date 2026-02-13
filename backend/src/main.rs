@@ -3,11 +3,9 @@ use std::sync::Arc;
 use axum::{
     Json, Router,
     extract::{Path, State},
-    middleware,
     routing::get,
 };
 use onitama::{onitama::game::Game, server::state::State as AppState};
-use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::prelude::*;
 
