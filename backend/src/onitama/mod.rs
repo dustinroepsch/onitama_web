@@ -1,5 +1,7 @@
 use std::fmt;
 
+use serde::{Deserialize, Serialize};
+
 pub mod board;
 pub mod card;
 pub mod cards;
@@ -7,7 +9,7 @@ pub mod coordinate;
 pub mod game;
 pub mod piece;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Color {
     Red,
     Blue,

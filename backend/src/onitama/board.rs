@@ -4,14 +4,15 @@ use crate::onitama::Color;
 use crate::onitama::coordinate::Coordinate;
 use crate::onitama::piece::Piece;
 use crate::onitama::piece::PieceType::{King, Pawn};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Cell {
     Empty,
     Taken(Piece),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Board {
     grid: [[Cell; 5]; 5],
 }
@@ -118,7 +119,10 @@ mod tests {
         let mut board = Board::new();
         let target = coord(2, 2);
         board.set(target, Cell::Taken(Piece::new(Pawn, Color::Red)));
-        assert_eq!(*board.get(target), Cell::Taken(Piece::new(Pawn, Color::Red)));
+        assert_eq!(
+            *board.get(target),
+            Cell::Taken(Piece::new(Pawn, Color::Red))
+        );
     }
 
     #[test]

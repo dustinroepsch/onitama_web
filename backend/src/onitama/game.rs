@@ -1,6 +1,7 @@
 use std::fmt::Display;
 
 use rand::seq::SliceRandom;
+use serde::Serialize;
 use thiserror::Error;
 
 use crate::onitama::{
@@ -10,7 +11,7 @@ use crate::onitama::{
     coordinate::Coordinate,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Game {
     board: Board,
     red_incoming: Option<CardId>,
