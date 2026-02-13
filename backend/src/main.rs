@@ -4,7 +4,6 @@ use axum::{
     Json, Router,
     extract::{Path, State},
     routing::get,
-    serve::Listener,
 };
 use onitama::{onitama::game::Game, server::state::State as AppState};
 
@@ -21,5 +20,5 @@ async fn main() {
 }
 
 async fn get_game(State(state): State<Arc<AppState>>, Path(room_id): Path<String>) -> Json<Game> {
-    return Json(state.make_or_get(room_id).clone_game());
+    Json(state.make_or_get(room_id).clone_game())
 }

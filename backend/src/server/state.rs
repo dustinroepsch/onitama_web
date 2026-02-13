@@ -9,6 +9,12 @@ pub struct State {
     id_to_game: Mutex<HashMap<String, Arc<Instance>>>,
 }
 
+impl Default for State {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl State {
     pub fn new() -> Self {
         Self {
