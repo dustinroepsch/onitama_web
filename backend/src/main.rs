@@ -6,7 +6,6 @@ use axum::{
     routing::{get, post},
 };
 use onitama::{
-    onitama::cards::CardId,
     onitama::game::{ActError, Action, Game},
     server::state::State as AppState,
 };

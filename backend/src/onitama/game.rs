@@ -130,7 +130,10 @@ impl Game {
             }
         }
 
-        for offset in &action.card.get().moves {
+        for offset in match active_player_color {
+            Color::Red => &action.card.get().rotated_moves,
+            Color::Blue => &action.card.get().moves,
+        } {
             if action.from.try_add(offset) == Some(action.to) {
                 *self.board.get_mut(action.to) = self.board.get(action.from).to_owned();
                 *self.board.get_mut(action.from) = Cell::Empty;
