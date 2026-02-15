@@ -250,12 +250,12 @@ mod tests {
     fn act_with_valid_card_and_piece() {
         let mut game = red_turn_game();
         // Red piece at (0, 0), using Tiger which Red holds, move to (1, 0)
-        let action = Action::new(coord(0, 0), coord(1, 0), CardId::Tiger);
+        let action = Action::new(coord(0, 0), coord(2, 0), CardId::Tiger);
         assert!(game.act(&action).is_ok());
         assert_eq!(game.current_player(), Color::Blue);
         assert_eq!(*game.board.get(coord(0, 0)), Cell::Empty);
         assert_eq!(
-            *game.board.get(coord(1, 0)),
+            *game.board.get(coord(2, 0)),
             Cell::Taken(Piece::new(PieceType::Pawn, Color::Red))
         );
     }
