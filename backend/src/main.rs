@@ -6,7 +6,11 @@ use axum::{
     routing::{get, post},
 };
 use onitama::{
-    onitama::game::{ActError, Action, Game},
+    onitama::{
+        card::Card,
+        cards::CARDS,
+        game::{ActError, Action, Game},
+    },
     server::state::State as AppState,
 };
 use tower_http::trace::TraceLayer;
@@ -35,6 +39,7 @@ async fn main() {
         .route("/room/{room_id}", get(get_game))
         .route("/act/{room_id}", post(post_action))
         .route("/display/{room_id}", get(get_game_display))
+        .route("/cards", get(get_cards))
         .layer(TraceLayer::new_for_http())
         .with_state(shared_state);
 
@@ -59,4 +64,9 @@ async fn get_game_display(
     Path(room_id): Path<String>,
 ) -> String {
     format!("{}", state.make_or_get(room_id))
+}
+
+#[axum::debug_handler]
+async fn get_cards() -> Json<Vec<Card>> {
+    Json(CARDS.values().cloned().collect())
 }

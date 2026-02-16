@@ -1,29 +1,25 @@
 use core::fmt;
 
+use serde::Serialize;
+
 use crate::onitama::Color;
 use crate::onitama::coordinate::Offset;
 
 pub type Moves = Vec<Offset>;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Serialize, PartialEq, Eq, Clone)]
 pub struct Card {
-    pub name: &'static str,
+    pub name: String,
     pub moves: Moves,
     pub rotated_moves: Moves,
     pub color: Color,
 }
 
 impl Card {
-    pub fn new(name: &'static str, moves: Moves, color: Color) -> Self {
-        let rotated_moves: Vec<_> = moves
-            .iter()
-            .map(|o| Offset {
-                y: -o.y,
-                x: -o.x,
-            })
-            .collect();
+    pub fn new(name: &str, moves: Moves, color: Color) -> Self {
+        let rotated_moves: Vec<_> = moves.iter().map(|o| Offset { y: -o.y, x: -o.x }).collect();
         Card {
-            name,
+            name: name.to_string(),
             moves,
             //Todo: actually rotate the moves
             rotated_moves,

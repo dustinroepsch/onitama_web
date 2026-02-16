@@ -49,7 +49,7 @@ impl TryFrom<(i8, i8)> for Coordinate {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize)]
 pub struct Offset {
     pub y: i8,
     pub x: i8,

@@ -30,7 +30,7 @@ pub enum CardId {
 
 impl Display for CardId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let name = self.get().name;
+        let name = &self.get().name;
         write!(f, "{name}")
     }
 }
