@@ -1,17 +1,13 @@
-use std::sync::{Arc, LazyLock};
+use std::sync::LazyLock;
 
 use salvo::{oapi::extract::PathParam, prelude::*};
 
 use onitama::{
-    onitama::{
-        card::Card,
-        cards::CARDS,
-        game::{ActError, Action, Game},
-    },
+    onitama::{card::Card, cards::CARDS, game::Game},
     server::state::State as AppState,
 };
 
-const STATE: LazyLock<AppState> = LazyLock::new(|| AppState::new());
+static STATE: LazyLock<AppState> = LazyLock::new(AppState::new);
 
 #[tokio::main]
 async fn main() {
