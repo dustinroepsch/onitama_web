@@ -1,10 +1,7 @@
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
-use axum::{
-    Json, Router,
-    extract::{Path, State},
-    routing::{get, post},
-};
+use salvo::{oapi::extract::PathParam, prelude::*};
+
 use onitama::{
     onitama::{
         card::Card,
@@ -13,60 +10,43 @@ use onitama::{
     },
     server::state::State as AppState,
 };
-use tower_http::trace::TraceLayer;
-use tracing_subscriber::prelude::*;
+
+const STATE: LazyLock<AppState> = LazyLock::new(|| AppState::new());
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::registry()
-        .with(
-            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
-                // axum logs rejections from built-in extractors with the `axum::rejection`
-                // target, at `TRACE` level. `axum::rejection=trace` enables showing those events
-                format!(
-                    "{}=debug,tower_http=debug,axum::rejection=trace",
-                    env!("CARGO_CRATE_NAME")
-                )
-                .into()
-            }),
-        )
-        .with(tracing_subscriber::fmt::layer())
-        .init();
+    tracing_subscriber::fmt().init();
 
-    let shared_state = Arc::new(AppState::new());
+    let acceptor = TcpListener::new("0.0.0.0:3000").bind().await;
 
-    let app = Router::new()
-        .route("/room/{room_id}", get(get_game))
-        .route("/act/{room_id}", post(post_action))
-        .route("/display/{room_id}", get(get_game_display))
-        .route("/cards", get(get_cards))
-        .layer(TraceLayer::new_for_http())
-        .with_state(shared_state);
+    let router = Router::new()
+        .push(Router::with_path("cards").get(get_cards))
+        .push(Router::with_path("room/{room_id}").get(get_game));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    Server::new(acceptor).serve(router).await;
 }
 
-async fn get_game(State(state): State<Arc<AppState>>, Path(room_id): Path<String>) -> Json<Game> {
-    Json(state.make_or_get(room_id).clone_game())
+#[handler]
+async fn get_game(room_id: PathParam<String>) -> Json<Game> {
+    Json(STATE.make_or_get(room_id.into_inner()).clone_game())
 }
 
-async fn post_action(
-    State(state): State<Arc<AppState>>,
-    Path(room_id): Path<String>,
-    Json(action): Json<Action>,
-) -> Json<Result<(), ActError>> {
-    Json(state.make_or_get(room_id).act(&action))
-}
+// #[handler]
+// async fn post_action(
+//     Path(room_id): Path<String>,
+//     Json(action): Json<Action>,
+// ) -> Json<Result<(), ActError>> {
+//     Json(state.make_or_get(room_id).act(&action))
+// }
 
-async fn get_game_display(
-    State(state): State<Arc<AppState>>,
-    Path(room_id): Path<String>,
-) -> String {
-    format!("{}", state.make_or_get(room_id))
-}
+// async fn get_game_display(
+//     State(state): State<Arc<AppState>>,
+//     Path(room_id): Path<String>,
+// ) -> String {
+//     format!("{}", state.make_or_get(room_id))
+// }
 
-#[axum::debug_handler]
+#[handler]
 async fn get_cards() -> Json<Vec<Card>> {
     Json(CARDS.values().cloned().collect())
 }
