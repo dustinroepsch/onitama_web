@@ -17,6 +17,7 @@ async fn main() {
 
     let router = Router::new()
         .push(Router::with_path("cards").get(get_cards))
+        .push(Router::with_path("display/{room_id}").get(get_game_display))
         .push(Router::with_path("room/{room_id}").get(get_game));
 
     Server::new(acceptor).serve(router).await;
@@ -35,12 +36,10 @@ async fn get_game(room_id: PathParam<String>) -> Json<Game> {
 //     Json(state.make_or_get(room_id).act(&action))
 // }
 
-// async fn get_game_display(
-//     State(state): State<Arc<AppState>>,
-//     Path(room_id): Path<String>,
-// ) -> String {
-//     format!("{}", state.make_or_get(room_id))
-// }
+#[handler]
+async fn get_game_display(room_id: PathParam<String>) -> String {
+    format!("{}", STATE.make_or_get(room_id.into_inner()))
+}
 
 #[handler]
 async fn get_cards() -> Json<Vec<Card>> {
