@@ -1,5 +1,6 @@
 use std::fmt;
 
+use salvo::oapi::ToSchema;
 use serde::{Deserialize, Serialize};
 
 pub mod board;
@@ -9,7 +10,7 @@ pub mod coordinate;
 pub mod game;
 pub mod piece;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub enum Color {
     Red,
     Blue,

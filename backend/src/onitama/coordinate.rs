@@ -1,9 +1,10 @@
 use std::{fmt::Display, ops::Add};
 
+use salvo::oapi::ToSchema;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub struct Coordinate {
     pub y: u8,
     pub x: u8,
@@ -49,7 +50,7 @@ impl TryFrom<(i8, i8)> for Coordinate {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, ToSchema)]
 pub struct Offset {
     pub y: i8,
     pub x: i8,

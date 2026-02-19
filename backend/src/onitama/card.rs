@@ -1,5 +1,6 @@
 use core::fmt;
 
+use salvo::oapi::ToSchema;
 use serde::Serialize;
 
 use crate::onitama::Color;
@@ -7,7 +8,7 @@ use crate::onitama::coordinate::Offset;
 
 pub type Moves = Vec<Offset>;
 
-#[derive(Debug, Serialize, PartialEq, Eq, Clone)]
+#[derive(Debug, Serialize, PartialEq, Eq, Clone, ToSchema)]
 pub struct Card {
     pub name: String,
     pub moves: Moves,

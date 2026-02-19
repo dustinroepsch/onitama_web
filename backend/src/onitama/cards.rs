@@ -2,13 +2,14 @@ use std::collections::HashMap;
 use std::fmt::Display;
 use std::sync::LazyLock;
 
+use salvo::oapi::ToSchema;
 use serde::{Deserialize, Serialize};
 
 use crate::onitama::Color;
 use crate::onitama::card::Card;
 use crate::onitama::coordinate::Offset;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, ToSchema)]
 pub enum CardId {
     Tiger,
     Dragon,

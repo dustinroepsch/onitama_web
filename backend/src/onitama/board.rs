@@ -4,15 +4,16 @@ use crate::onitama::Color;
 use crate::onitama::coordinate::Coordinate;
 use crate::onitama::piece::Piece;
 use crate::onitama::piece::PieceType::{King, Pawn};
+use salvo::oapi::ToSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 pub enum Cell {
     Empty,
     Taken(Piece),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct Board {
     grid: [[Cell; 5]; 5],
 }
